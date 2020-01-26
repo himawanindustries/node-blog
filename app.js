@@ -1,17 +1,22 @@
+//jshint esversion:6
+
+//Declaration
 const express=require("express");
-const request=require("request");
 const bodyParser=require("body-parser");
+const request=require("request");
 const app=express();
 
-app.listen(3000,function(){
-  console.log("Ready on port 3000");
-});
+//Setup
+app.listen("3000",function(){
+  console.log("Run on Port 3000");
+})
+app.set("view engine","ejs");
 
-app.use(bodyParser.urlencoded({extended:true}));
+//use module
 app.use(express.static("public"));
-app.set('view engine','ejs');
+app.use(bodyParser.urlencoded({extended:true}));
 
+//route
 app.get("/",function(req,res){
-  let test="Hello";
-  res.render("home",{Test:test});
-});
+  res.render("index","");
+})
