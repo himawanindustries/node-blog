@@ -2,7 +2,7 @@
 <div class="row justify-content-center">
   <div class="card">
     <div class="card-body">
-      <form action="login" method="post">
+      <form action="signup" method="post">
           <div class="form-group">
             <label for="usernameinput">Username</label>
             <input class="form-control" type="text" id="usernameinput" name="usernameinput">
@@ -11,8 +11,18 @@
             <label for="passwordinput">Password</label>
             <input class="form-control" type="password" id="paswordinput" name="passwordinput">
           </div>
-        <button class="btn btn-primary" type="submit" name="button">Log in</button>
-        <small><a href="/signup">Register</a></small>
+          <div class="form-group">
+            <label for="passwordinput">Verify Password</label>
+            <input class="form-control" type="password" id="paswordinput" name="passwordinput">
+          </div>
+        <div class="row">
+            <div class="col text-center">
+              <button class="btn btn-primary" type="submit" name="button">Register</button>
+            </div>
+            <div class="col text-center">
+              <a class="btn btn-danger" href="/home">Cancel</a>
+            </div>
+        </div>
       </form>
     </div>
   </div>
