@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <%- include("partials/header")-%>
 <div class="row justify-content-center">
   <div class="card">
@@ -13,32 +13,10 @@
             <input class="form-control" name="passwordInput" type="password" id="password">
           </div>
           <button type="submit" class="btn btn-primary">Login</button>
-          <a href="/reset"><small class="mx-2">Forgot Password?</small></a>
+          <a href="/signup"><small class="mx-2">Register</small></a>
       </form>
 
     </div>
   </div>
 </div>
 <%- include("partials/footer")-%>
-=======
-<%- include("partials/header") -%>
-<div class="row justify-content-center">
-  <div class="card">
-    <div class="card-body">
-      <form action="login" method="post">
-          <div class="form-group">
-            <label for="usernameinput">Username</label>
-            <input class="form-control" type="text" id="usernameinput" name="usernameinput">
-          </div>
-          <div class="form-group">
-            <label for="passwordinput">Password</label>
-            <input class="form-control" type="password" id="paswordinput" name="passwordinput">
-          </div>
-        <button class="btn btn-primary" type="submit" name="button">Log in</button>
-        <small><a href="/signup">Register</a></small>
-      </form>
-    </div>
-  </div>
-</div>
-<%- include("partials/footer") -%>
->>>>>>> ef226e04a4ad9f365d42be10d12f06a1a76840bf
