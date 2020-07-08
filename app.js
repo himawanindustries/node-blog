@@ -8,6 +8,10 @@ const ejs=require("ejs");
 const app=express();
 const _=require("lodash");
 const mongoose=require("mongoose");
+const cors=require("cors");
+// const config=require("/config/auth.config.js");
+var jwt=require("jsonwebtoken");
+var bcrypt=require("bcryptjs");
 
 //contents
 const homeStartingContent="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc non augue a justo vulputate condimentum vitae eu tortor. Nulla facilisi. Duis sed eleifend nulla, ut consequat mi. Mauris hendrerit risus ipsum, non commodo nisl sodales pharetra. Nulla facilisi. Pellentesque efficitur odio augue, at tincidunt lorem dictum sit amet. In dolor diam, iaculis sit amet nisl sit amet, mollis fermentum enim.";
@@ -21,6 +25,10 @@ const contactContent="Quisque purus velit, hendrerit efficitur libero vulputate,
 //   console.log("Run on Port 3000");
 // })
 
+//cors
+var corsOptions={
+  origin:"http://localhost:3001"
+}
 //setup to heroku port and local
 let port= process.env.PORT;
 if (port==null||port=="") {
@@ -38,12 +46,18 @@ mongoose.connect("mongodb+srv://rrow10:Mongodb234@cluster0-ublo5.mongodb.net/blo
 //create schema + model
 const postsSchema={title:String,content:String};
 const postModel=mongoose.model("post",postsSchema);
+<<<<<<< HEAD
 const loginSchema={username:String,password:String};
 const loginModel=mongoose.model("login",loginSchema);
+=======
+const userSchema={username:String,password:String};
+const userModel=mongoose.model("user",userSchema);
+>>>>>>> ef226e04a4ad9f365d42be10d12f06a1a76840bf
 
 //use express module
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 
 //route
 app.get("/",function(req,res){
@@ -76,7 +90,14 @@ app.get("/compose",function(req,res){
   })
 })
 
+<<<<<<< HEAD
 
+=======
+app.get("/login",function(req,res){
+  res.render("login",{
+  })
+})
+>>>>>>> ef226e04a4ad9f365d42be10d12f06a1a76840bf
 
 //compose
 app.post("/compose",function(req,res){
@@ -94,7 +115,6 @@ app.post("/compose",function(req,res){
     res.redirect("/");
   }
   });
-
 })
 
 //posts route
@@ -121,6 +141,7 @@ app.get("/posts/:postId",function(req,res){
 
 })
 
+<<<<<<< HEAD
 app.get("/login",function(req,res){
   res.render("login",{
   })
@@ -136,3 +157,41 @@ app.post("/login",function(req,res){
   })
 })
 ;
+=======
+//Signup
+app.get("/signup",function(req,res){
+  res.render("signup");
+})
+app.post("/signup", function(req,res){
+  
+})
+//login
+app.post("/login",function(req,res){
+  userModel.findOne({username:req.body.usernameinput},function (err,user){
+    if (!user) {
+      // return res.status(404).send({message: "User not found."});
+      console.log("user not found");
+      res.redirect("/login");
+    }
+
+    var passwordIsValid=bcrypt.compareSync(
+      req.body.passwordinput,
+      user.password
+    );
+
+    if (!passwordIsValid) {
+      console.log("Invalid Password");
+    }
+
+    var token =jwt.sign({id:user._id},'123',{expiresIn:86400});
+    res.status(200).send({
+      id:user._id,
+      username:user.username,
+      accessToken:token
+    });
+});
+
+
+
+});
+>>>>>>> ef226e04a4ad9f365d42be10d12f06a1a76840bf
