@@ -38,6 +38,8 @@ mongoose.connect("mongodb+srv://rrow10:Mongodb234@cluster0-ublo5.mongodb.net/blo
 //create schema + model
 const postsSchema={title:String,content:String};
 const postModel=mongoose.model("post",postsSchema);
+const loginSchema={username:String,password:String};
+const loginModel=mongoose.model("login",loginSchema);
 
 //use express module
 app.use(express.static("public"));
@@ -73,6 +75,8 @@ app.get("/compose",function(req,res){
   res.render("compose",{
   })
 })
+
+
 
 //compose
 app.post("/compose",function(req,res){
@@ -115,4 +119,20 @@ app.get("/posts/:postId",function(req,res){
   //   };
   // });
 
-});
+})
+
+app.get("/login",function(req,res){
+  res.render("login",{
+  })
+})
+
+app.post("/login",function(req,res){
+  const credential=new loginModel({
+    username:req.body.usernameInput,
+    password:req.body.passwordInput
+  });
+  loginModel.findOne({username:username},function(){
+    res.render("compose");
+  })
+})
+;
