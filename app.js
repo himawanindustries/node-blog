@@ -46,10 +46,8 @@ mongoose.connect("mongodb+srv://rrow10:Mongodb234@cluster0-ublo5.mongodb.net/blo
 //create schema + model
 const postsSchema={title:String,content:String};
 const postModel=mongoose.model("post",postsSchema);
-const loginSchema={username:String,password:String};
-const loginModel=mongoose.model("login",loginSchema);
-const userSchema={username:String,password:String};
-const userModel=mongoose.model("user",userSchema);
+const usersSchema={username:String,password:String};
+const userModel=mongoose.model("user",usersSchema);
 
 //use express module
 app.use(express.static("public"));
@@ -84,8 +82,21 @@ app.get("/contact",function(req,res){
 })
 
 app.get("/compose",function(req,res){
-  res.render("compose",{
-  })
+  verifyToken=(req,res,next)=>{
+    let tokken=req.headers["x-access-token"];
+    if (!token) {
+      console.log("No token");
+    }
+
+    jwt.verify(token, "123", (err,decoded)=>{
+      if (err) {
+        console.log("unauthorized");
+      }
+      res.render("compose",{
+      })
+    })
+  }
+
 })
 
 app.get("/login",function(req,res){
@@ -143,18 +154,23 @@ app.get("/signup",function(req,res){
 app.post("/signup", function(req,res){
   userModel.findOne({username:req.body.usernameinput}).exec((err,user)=>{
     if (err) {
-      console.log("Error found "+message.err);
+      console.log("Error found "+ message.err);
     }
     if (user) {
       console.log("Username exist");
     }
-    const inputUser=new userModel({
+
+    const Saveuser=new userModel({
       username:req.body.usernameinput,
-      password:bcrypt.hashSync(req.body.passwordinput,6)
+      // password:bcrypt.hashSync(req.body.passwordinput,6)
+      password:req.body.passwordinput
     });
-    inputUser.save(function(err){
-      res.redirect("/signup");
-      console.log("User entry");
+
+    Saveuser.save(function(err){
+      if (!err) {
+        res.redirect("/home");
+        console.log("User entry");
+      }
     });
   });
 })
@@ -166,25 +182,32 @@ app.get("/login",function(req,res){
 })
 
 app.post("/login",function(req,res){
-  userModel.findOne({username:req.body.usernameinput},function (err,user){
+  userModel.findOne({username:req.body.usernameInput},function (err,user){
     if (!user) {
-      // return res.status(404).send({message: "User not found."});
       console.log("user not found");
       res.redirect("/login");
     }
 
-    var passwordIsValid=bcrypt.compareSync(
-      req.body.passwordinput,
-      user.password
-    );
+    // var passwordIsValid=bcrypt.compareSync(
+    //   req.body.passwordinput,
+    //   user.password
+    // );
+    //
+    // if (!passwordIsValid) {
+    //   console.log("Invalid Password");
+    // }
 
-    if (!passwordIsValid) {
-      console.log("Invalid Password");
-    }
     var token =jwt.sign({id:user._id},'123',{expiresIn:86400});
+
+    const usernamelog=req.body.usernameInput;
+    userModel.findOneAndUpdate({username:req.body.usernameInput},{accessToken:token},function(req,res){
+      console.log("user : "+ usernamelog + " token assigned : "+ token);
+    });
+    // res.redirect("/compose");
     res.status(200).send({
       id:user._id,
       username:user.username,
       accessToken:token
     });
+
   })});
