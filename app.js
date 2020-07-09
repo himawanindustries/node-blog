@@ -55,6 +55,7 @@ const userModel=mongoose.model("user",userSchema);
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+app.use(cors(corsOptions));
 
 //route
 app.get("/",function(req,res){
@@ -140,7 +141,22 @@ app.get("/signup",function(req,res){
   res.render("signup");
 })
 app.post("/signup", function(req,res){
-
+  userModel.findOne({username:req.body.usernameinput}).exec((err,user)=>{
+    if (err) {
+      console.log("Error found "+message.err);
+    }
+    if (user) {
+      console.log("Username exist");
+    }
+    const inputUser=new userModel({
+      username:req.body.usernameinput,
+      password:bcrypt.hashSync(req.body.passwordinput,6)
+    });
+    inputUser.save(function(err){
+      res.redirect("/signup");
+      console.log("User entry");
+    });
+  });
 })
 
 //login
