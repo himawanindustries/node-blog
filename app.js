@@ -46,7 +46,7 @@ mongoose.connect("mongodb+srv://rrow10:Mongodb234@cluster0-ublo5.mongodb.net/blo
 //create schema + model
 const postsSchema={title:String,content:String};
 const postModel=mongoose.model("post",postsSchema);
-const usersSchema={username:String,password:String};
+const usersSchema={username:String,password:String,accessToken:String};
 const userModel=mongoose.model("user",usersSchema);
 
 //use express module
@@ -162,14 +162,15 @@ app.post("/signup", function(req,res){
 
     const Saveuser=new userModel({
       username:req.body.usernameinput,
-      // password:bcrypt.hashSync(req.body.passwordinput,6)
-      password:req.body.passwordinput
+      password:bcrypt.hashSync(req.body.passwordinput,6),
+      // password:req.body.passwordinput,
+      accessToken:""
     });
 
     Saveuser.save(function(err){
       if (!err) {
-        res.redirect("/home");
-        console.log("User entry");
+        res.redirect("/");
+        console.log("User entered");
       }
     });
   });
