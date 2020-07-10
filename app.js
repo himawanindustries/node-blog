@@ -163,14 +163,13 @@ app.post("/signup", function(req,res){
     const Saveuser=new userModel({
       username:req.body.usernameinput,
       password:bcrypt.hashSync(req.body.passwordinput,6),
-      // password:req.body.passwordinput,
       accessToken:""
     });
 
     Saveuser.save(function(err){
       if (!err) {
         res.redirect("/");
-        console.log("User entered");
+        console.log("New user registered successfully");
       }
     });
   });
@@ -189,20 +188,19 @@ app.post("/login",function(req,res){
       res.redirect("/login");
     }
 
-    // var passwordIsValid=bcrypt.compareSync(
-    //   req.body.passwordinput,
-    //   user.password
-    // );
-    //
-    // if (!passwordIsValid) {
-    //   console.log("Invalid Password");
-    // }
+    var passwordIsValid=bcrypt.compareSync(
+      req.body.passwordInput,
+      user.password
+    );
+
+    if (!passwordIsValid) {
+      console.log("Invalid Password");
+    }
 
     var token =jwt.sign({id:user._id},'123',{expiresIn:86400});
-
-    const usernamelog=req.body.usernameInput;
+  
     userModel.findOneAndUpdate({username:req.body.usernameInput},{accessToken:token},function(req,res){
-      console.log("user : "+ usernamelog + " token assigned : "+ token);
+    console.log("user : "+ usernamelog + " token assigned : "+ token);
     });
     // res.redirect("/compose");
     res.status(200).send({
