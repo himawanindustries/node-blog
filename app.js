@@ -1,3 +1,4 @@
+//Kantor
 //jshint esversion:6
 
 //Module import
@@ -198,7 +199,7 @@ app.post("/login",function(req,res){
     }
 
     var token =jwt.sign({id:user._id},'123',{expiresIn:86400});
-  
+
     userModel.findOneAndUpdate({username:req.body.usernameInput},{accessToken:token},function(req,res){
     console.log("user : "+ usernamelog + " token assigned : "+ token);
     });
